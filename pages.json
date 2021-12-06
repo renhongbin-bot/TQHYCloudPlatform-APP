@@ -1,0 +1,73 @@
+{
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom" // 去掉页头
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		}, {
+			"path": "pages/terminal/terminal",
+			"style": {
+				"navigationBarTitleText": "数据终端",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/developer/developer",
+			"style": {
+				"navigationBarTitleText": "开发者",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "用户中心",
+				"enablePullDownRefresh": false
+			}
+
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#007aff",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/images/index.png",
+			"selectedIconPath": "static/images/index-color.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/terminal/terminal",
+			"iconPath": "static/images/terminal.png",
+			"selectedIconPath": "static/images/terminal-color.png",
+			"text": "数据终端"
+		}, {
+			"pagePath": "pages/developer/developer",
+			"iconPath": "static/images/developer.png",
+			"selectedIconPath": "static/images/developer-color.png",
+			"text": "开发者"
+		}, {
+			"pagePath": "pages/user/user",
+			"iconPath": "static/images/user.png",
+			"selectedIconPath": "static/images/user-color.png",
+			"text": "用户中心"
+		}]
+	}
+}
