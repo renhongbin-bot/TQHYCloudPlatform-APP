@@ -1,0 +1,149 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2916546 */
+  src: url('~@/static/fonts/iconfont.ttf')
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.v-icon-bj:before {
+  content: "\e606";
+}
+
+.v-icon-baojingjilu:before {
+  content: "\e699";
+}
+
+.v-icon-201yonghu_yonghu2:before {
+  content: "\e63d";
+}
+
+.v-icon-shexiangtou1:before {
+  content: "\e7e8";
+}
+
+.v-icon-tianjia:before {
+  content: "\e657";
+}
+
+.v-icon-liuliang:before {
+  content: "\e602";
+}
+
+.v-icon-tianqizitiku28:before {
+  content: "\e620";
+}
+
+.v-icon-yelvsu:before {
+  content: "\e62d";
+}
+
+.v-icon-yeweiyi:before {
+  content: "\e611";
+}
+
+.v-icon-duoyun:before {
+  content: "\e6f3";
+}
+
+.v-icon-daqiya:before {
+  content: "\e998";
+}
+
+.v-icon-wendu:before {
+  content: "\e660";
+}
+
+.v-icon-shidujiance_1:before {
+  content: "\e618";
+}
+
+.v-icon-xinxikongxin:before {
+  content: "\ed1b";
+}
+
+.v-icon-shizhong:before {
+  content: "\e74f";
+}
+
+.v-icon-wxbzhanghu:before {
+  content: "\e61f";
+}
+
+.v-icon-xinxibar_zhanghu:before {
+  content: "\e7c8";
+}
+
+.v-icon-zhanghushezhi:before {
+  content: "\e615";
+}
+
+.v-icon-mima:before {
+  content: "\e601";
+}
+
+.v-icon-zhanghao:before {
+  content: "\e66d";
+}
+
+.v-icon-jinggao:before {
+  content: "\e600";
+}
+
+.v-icon-dengchu:before {
+  content: "\e612";
+}
+
+.v-icon-diannao_o:before {
+  content: "\eb49";
+}
+
+.v-icon-yonghu:before {
+  content: "\e64e";
+}
+
+.v-icon-wj-djb:before {
+  content: "\e712";
+}
+
+.v-icon-shexiangtou:before {
+  content: "\eca5";
+}
+
+.v-icon-other:before {
+  content: "\e714";
+}
+
+.v-icon-qita:before {
+  content: "\e63a";
+}
+
+.v-icon-gongdan:before {
+  content: "\e6a5";
+}
+
+.v-icon-shouji:before {
+  content: "\e8b9";
+}
+
+.v-icon-shebeiquyufenbu:before {
+  content: "\e61d";
+}
+
+.v-icon-shouye:before {
+  content: "\e61e";
+}
+
+.v-icon-shangxia:before {
+  content: "\e608";
+}
+
+.v-icon-tongyong-huanyingnitubiao:before {
+  content: "\e63b";
+}
+

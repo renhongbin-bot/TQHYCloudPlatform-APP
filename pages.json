@@ -12,12 +12,14 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/terminal/terminal",
 			"style": {
 				"navigationBarTitleText": "数据终端",
+				"navigationBarTextStyle":"white",
+				"navigationBarBackgroundColor":" #3366CC",
 				"enablePullDownRefresh": false
 			}
 
@@ -36,7 +38,88 @@
 			}
 
 		}
-	],
+        ,{
+            "path" : "pages/user/account/accountManagement",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "账户管理",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/account/edituser/editUserName",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "修改用户名",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/account/edituser/editUserPhone",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "修改手机号码",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/account/edituser/editUserEmail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "修改邮箱",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/account/edituser/editUserPassword",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "修改密码",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/account/edituser/edituserphonenext/editUserPhoneNext",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "修改手机号码",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/account/edituser/edituseremailnext/editUserEmailNext",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "修改邮箱",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/journal/journal",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "系统日志",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/terminal/EditTerminal",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "详细信息",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

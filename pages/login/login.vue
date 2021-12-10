@@ -18,18 +18,49 @@
 				}"
 			></u-tabs>
 			<view class="_login" v-show="index == 0 && isShow">
-				<u--input class="phone-inp" placeholder="请输入手机号" prefixIcon="phone" prefixIconStyle="font-size: 44rpx;color: #007aff"></u--input>
-				<u--input type="password" placeholder="请输入密码" suffixIcon="eye" prefixIcon="lock" prefixIconStyle="font-size: 44rpx;color: #007aff"></u--input>
+				<view class="">
+					<u-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
+						<u-form-item prop="userName">
+							<u--input
+								v-model="loginForm.userName"
+								class="input-phone"
+								border="bottom"
+								placeholder="请输入手机号"
+								prefixIcon="phone"
+								prefixIconStyle="font-size: 44rpx;color: #007aff"
+							></u--input>
+						</u-form-item>
+						<u-form-item prop="userPassword">
+							<u--input
+								v-model="loginForm.userPassword"
+								class="input-pwd"
+								border="bottom"
+								type="password"
+								placeholder="请输入密码"
+								suffixIcon="eye"
+								prefixIcon="lock"
+								prefixIconStyle="font-size: 44rpx;color: #007aff"
+							></u--input>
+						</u-form-item>
+					</u-form>
+				</view>
 				<view class="_login-remember">
-					<u-checkbox-group class="_remenber" placement="column"><u-checkbox label="记住密码"></u-checkbox></u-checkbox-group>
+					<u-checkbox-group class="_remenber" placement="column"><u-checkbox v-model="checked" label="记住密码"></u-checkbox></u-checkbox-group>
 					<u--text class="pwd" type="primary" text="忘记密码？"></u--text>
 				</view>
-				<u-button @click="gotoIndex" type="primary" shape="circle" text="登录"></u-button>
+				<u-notify message="nihao" :show="true"></u-notify>
+				<u-button @click="login" type="primary" shape="circle" text="登录"></u-button>
 			</view>
 			<view class="_register" v-show="index == 1">
-				<u--input class="phone-inp" placeholder="请输入手机号" prefixIcon="phone" prefixIconStyle="font-size: 44rpx;color: #007aff"></u--input>
-				<u--input class="phone-code" placeholder="请输入验证码" prefixIcon="info-circle" prefixIconStyle="font-size: 44rpx;color: #007aff"></u--input>
-				<u-text type="primary" class="code-text" text="获取验证码"></u-text>
+				<u--input border="bottom" class="phone-inp" placeholder="请输入手机号" prefixIcon="phone" prefixIconStyle="font-size: 44rpx;color: #007aff"></u--input>
+				<u--input prefixIconStyle="font-size: 44rpx;color: #007aff" class="code-text" prefixIcon="more-circle" border="bottom" placeholder="请输入验证码">
+					<!-- #endif -->
+					<template slot="suffix">
+						<u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
+						<u-button @tap="getCode" :text="tips" type="success" size="mini"></u-button>
+					</template>
+					<!-- #ifndef APP-NVUE -->
+				</u--input>
 				<u--input
 					class="pripwd mrg-bottom"
 					type="password"
@@ -38,6 +69,7 @@
 					suffixIconStyle="font-size: 44rpx; color: #007aff"
 					prefixIcon="lock"
 					prefixIconStyle="font-size: 44rpx;color: #007aff"
+					border="bottom"
 				></u--input>
 				<u-button type="primary" shape="circle" text="注册"></u-button>
 			</view>
@@ -49,6 +81,10 @@
 export default {
 	data() {
 		return {
+			loginForm: {
+				userName: '',
+				userPassword: ''
+			},
 			list: [
 				{
 					name: '登录'
@@ -58,7 +94,17 @@ export default {
 				}
 			],
 			isShow: true,
-			index: 0
+			// 控制记住密码
+			checked: true,
+			index: 0,
+			tips: '',
+			userlist: [],
+			loginFormRules: {
+				// 验证用户名是否合法
+				userName: [{ required: true, message: '请输入登录账号', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
+				// 验证密码是否合法
+				userPassword: [{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 3, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }]
+			}
 		};
 	},
 	methods: {
@@ -66,11 +112,101 @@ export default {
 			this.index = item.index ? (this.isShow = !this.isShow) : (this.isShow = true);
 			this.index = item.index;
 		},
-		gotoIndex() {
-			// 跳转到tabar页面
-			uni.switchTab({
-				url: '/pages/index/index'
-			})
+		login() {
+			this.$sendRequest({
+				url: `app/login?userName=${this.loginForm.userName}&userPassword=${this.loginForm.userPassword}`,
+				success: res => {
+					if (res.data.state === "200") {
+						console.log(res.data);
+						this.userlist = res.data.loginUser;
+						console.log(this.userlist);
+						window.sessionStorage.setItem('userToken', res.userToken);
+						uni.setStorageSync('loginUser', res.data.loginUser);
+						uni.showToast({
+							title: "登录成功"
+						});
+						if (this.checked === true) {
+							this.setCookie(this.loginForm.userName, this.loginForm.userPassword, 2);
+						} else {
+							this.clearCookie();
+						}
+						uni.switchTab({
+							url: '../index/index'
+						});
+					} else if (res.data.state === '40001') {
+						uni.showToast({
+							title: '用户名不存在',
+							icon: 'none'
+						});
+					} else if (res.data.state === '40002') {
+						uni.showToast({
+							title: '密码错误',
+							icon: 'none'
+						});
+					} else if (res.data.state === '40003') {
+						uni.showToast({
+							title: '用户被锁定，不能登录',
+							icon: 'none'
+						});
+					} else if (res.data.state === '40004') {
+						uni.showToast({
+							title: '无法识别的错误',
+							icon: 'none'
+						});
+					}
+				}
+			});
+		},
+		setCookie(c_name, c_pwd, exdays) {
+			var exdate = new Date(); // 获取当前时间
+			exdate.setTime(exdate.getTime() + 30 * 24 * 60 * 60 * 1000 * exdays); // 保存天数
+			// 字符串拼接cookie
+			// eslint-disable-next-line camelcase
+			window.document.cookie = 'userName' + '=' + c_name + ';path=/;expires' + exdate.toGMTString();
+			// eslint-disable-next-line camelcase
+			window.document.cookie = 'userPwd' + '=' + c_pwd + ';path=/;expires' + exdate.toGMTString();
+		},
+		// 读取cookie
+		getCookie() {
+			if (document.cookie.length > 0) {
+				const arr = document.cookie.split('; ');
+				for (let i = 0; i < arr.length; i++) {
+					const arr2 = arr[i].split('=');
+					console.log(arr2);
+					if (arr2[0] === 'userName') {
+						this.loginForm.userName = arr2[1];
+					} else if (arr2[0] === 'userPwd') {
+						this.loginForm.userPassword = arr2[1];
+					}
+				}
+			}
+		},
+		// 清除cookie
+		clearCookie() {
+			this.setCookie('', '', '-1');
+		},
+		codeChange(text) {
+			this.tips = text;
+		},
+		getCode() {
+			if (this.$refs.uCode.canGetCode) {
+				// 模拟向后端请求验证码
+				uni.showLoading({
+					title: '正在获取验证码'
+				});
+				setTimeout(() => {
+					uni.hideLoading();
+					// 这里此提示会被this.start()方法中的提示覆盖
+					uni.$u.toast('验证码已发送');
+					// 通知验证码组件内部开始倒计时
+					this.$refs.uCode.start();
+				}, 500);
+			} else {
+				uni.$u.toast('倒计时结束后再发送');
+			}
+		},
+		change(e) {
+			console.log('change', e);
 		}
 	}
 };
@@ -101,19 +237,22 @@ export default {
 }
 .phone-code {
 	margin-bottom: 40rpx;
-	width: 60%;
+	width: 55%;
 	float: left;
 	margin-right: 80rpx;
 }
 .code-text {
-	line-height: 37px;
 	display: block;
+	color: #007aff;
+	margin-bottom: 40rpx;
 }
 .pripwd {
 	width: 95%;
 }
 .phone-inp {
 	margin-bottom: 40rpx;
+	display: block;
+	width: 100%;
 }
 ._login-remember {
 	margin-top: 40rpx;
