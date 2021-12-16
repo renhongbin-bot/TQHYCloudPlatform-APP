@@ -120,19 +120,21 @@ export default {
 						console.log(res.data);
 						this.userlist = res.data.loginUser;
 						console.log(this.userlist);
-						window.sessionStorage.setItem('userToken', res.userToken);
+						// window.sessionStorage.setItem('userToken', res.data.userToken);
 						uni.setStorageSync('loginUser', res.data.loginUser);
 						uni.showToast({
 							title: "登录成功"
 						});
-						if (this.checked === true) {
-							this.setCookie(this.loginForm.userName, this.loginForm.userPassword, 2);
-						} else {
-							this.clearCookie();
-						}
-						uni.switchTab({
-							url: '../index/index'
-						});
+						// if (this.checked === true) {
+						// 	this.setCookie(this.loginForm.userName, this.loginForm.userPassword, 2);
+						// } else {
+						// 	this.clearCookie();
+						// }
+						setTimeout(() => {
+							uni.switchTab({
+								url: '../index/index'
+							});
+						}, 200)
 					} else if (res.data.state === '40001') {
 						uni.showToast({
 							title: '用户名不存在',
@@ -157,34 +159,34 @@ export default {
 				}
 			});
 		},
-		setCookie(c_name, c_pwd, exdays) {
-			var exdate = new Date(); // 获取当前时间
-			exdate.setTime(exdate.getTime() + 30 * 24 * 60 * 60 * 1000 * exdays); // 保存天数
-			// 字符串拼接cookie
-			// eslint-disable-next-line camelcase
-			window.document.cookie = 'userName' + '=' + c_name + ';path=/;expires' + exdate.toGMTString();
-			// eslint-disable-next-line camelcase
-			window.document.cookie = 'userPwd' + '=' + c_pwd + ';path=/;expires' + exdate.toGMTString();
-		},
-		// 读取cookie
-		getCookie() {
-			if (document.cookie.length > 0) {
-				const arr = document.cookie.split('; ');
-				for (let i = 0; i < arr.length; i++) {
-					const arr2 = arr[i].split('=');
-					console.log(arr2);
-					if (arr2[0] === 'userName') {
-						this.loginForm.userName = arr2[1];
-					} else if (arr2[0] === 'userPwd') {
-						this.loginForm.userPassword = arr2[1];
-					}
-				}
-			}
-		},
-		// 清除cookie
-		clearCookie() {
-			this.setCookie('', '', '-1');
-		},
+		// setCookie(c_name, c_pwd, exdays) {
+		// 	var exdate = new Date(); // 获取当前时间
+		// 	exdate.setTime(exdate.getTime() + 30 * 24 * 60 * 60 * 1000 * exdays); // 保存天数
+		// 	// 字符串拼接cookie
+		// 	// eslint-disable-next-line camelcase
+		// 	window.document.cookie = 'userName' + '=' + c_name + ';path=/;expires' + exdate.toGMTString();
+		// 	// eslint-disable-next-line camelcase
+		// 	window.document.cookie = 'userPwd' + '=' + c_pwd + ';path=/;expires' + exdate.toGMTString();
+		// },
+		// // 读取cookie
+		// getCookie() {
+		// 	if (document.cookie.length > 0) {
+		// 		const arr = document.cookie.split('; ');
+		// 		for (let i = 0; i < arr.length; i++) {
+		// 			const arr2 = arr[i].split('=');
+		// 			console.log(arr2);
+		// 			if (arr2[0] === 'userName') {
+		// 				this.loginForm.userName = arr2[1];
+		// 			} else if (arr2[0] === 'userPwd') {
+		// 				this.loginForm.userPassword = arr2[1];
+		// 			}
+		// 		}
+		// 	}
+		// },
+		// // 清除cookie
+		// clearCookie() {
+		// 	this.setCookie('', '', '-1');
+		// },
 		codeChange(text) {
 			this.tips = text;
 		},

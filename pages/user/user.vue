@@ -1,5 +1,13 @@
 <template>
 	<view class="_user">
+		<view class="empty">
+			
+		</view>
+		<nav>
+			<span slot="terminal" class="nav">
+				用户中心
+			</span>
+		</nav>
 		<view class="_user-image">
 			<u--image class="text-bck" src="../../static/images/text-bck.png" mode="scaleToFill" width="720rpx"></u--image>
 			<view class="u_image">
@@ -22,6 +30,7 @@
 
 <script>
 	import UserManage from '@/components/user/UserManage.vue'
+	import Nav from '@/components/nav/Nav.vue'
 	export default {
 		data() {
 			return {
@@ -32,7 +41,8 @@
 			this.loginUser = uni.getStorageSync('loginUser')
 		},
 		components: {
-			UserManage
+			UserManage,
+			Nav
 		},
 		methods: {
 			// 退出登录
@@ -97,5 +107,18 @@
 	}
 	.u-cell{
 		margin-top: 20rpx;
+	}
+	.empty{
+		width: 100%;
+		height: 56rpx;
+		background-color:  rgba($color: #000000, $alpha: 0.5);
+	}
+	.nav{
+		display: block;
+		height: 88rpx;
+		line-height: 88rpx;
+		text-align: center;
+		background-color: rgba($color: #000000, $alpha: 0.5);
+		color: #222;
 	}
 </style>

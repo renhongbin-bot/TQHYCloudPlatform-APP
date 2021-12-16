@@ -25,7 +25,7 @@
 				</u-col>
 				<u-col span="6">
 					<view class="demo-layout bg-purple">
-						<span class="number">{{loginUser.userLoginTimes}}</span>
+						<span class="number">{{ loginUser.userLoginTimes }}</span>
 						<p>历史访问</p>
 					</view>
 				</u-col>
@@ -35,13 +35,13 @@
 			<u-row class="row-one" customStyle="margin-top: 10px">
 				<u-col span="6">
 					<view class="demo-layout bg-purple-light">
-						<span class="number">{{count}}</span>
+						<span class="number">{{ count }}</span>
 						<p>现有设备</p>
 					</view>
 				</u-col>
 				<u-col span="6">
 					<view class="demo-layout bg-purple">
-						<span class="number">{{clientCount}}</span>
+						<span class="number">{{ clientCount }}</span>
 						<p>现有客户</p>
 					</view>
 				</u-col>
@@ -57,51 +57,6 @@
 			<p class="alarn-font">服务器状态</p>
 			<server></server>
 		</view>
-		<u-line></u-line>
-		<view class="task-list">
-			<p class="alarn-font">任务列表</p>
-			<u-swipe-action>
-				<u-swipe-action-item v-for="(item, index) in tasklist" :options="options2" @click="editTask($event.index, item.taskId)">
-					<view :index="index" class="swipe-action u-border-top u-border-bottom">
-						<view class="swipe-action__content">
-							<text class="swipe-action__content__text">{{ item.taskName }}</text>
-						</view>
-					</view>
-				</u-swipe-action-item>
-			</u-swipe-action>
-		</view>
-		<u-overlay :show="show" @click="show = false">
-			<view class="warp">
-				<u--form labelPosition="left" :model="editForm" label="详细信息" class="form-bgc">
-					<u-form-item label="项目Id" labelWidth="100" prop="taskId" borderBottom><u--input v-model="editForm.taskId" border="none" disabled></u--input></u-form-item>
-					<u-form-item label="项目名称" labelWidth="100" prop="taskName" borderBottom><u--input v-model="editForm.taskName" border="none" disabled></u--input></u-form-item>
-					<u-form-item label="详细信息" labelWidth="100" prop="taskContent" borderBottom><u--input v-model="editForm.taskContent" border="none" disabled></u--input></u-form-item>
-					<u-form-item label="项目状态" labelWidth="100" prop="taskState" borderBottom>
-						<u-tag
-							:text="editForm.taskState == 0 ? '已完成' : editForm.taskState == 1 ? '进行中' : editForm.taskState == 2 ? '已过期' : '123'"
-							:type="editForm.taskState == 0 ? 'success' : editForm.taskState == 1 ? 'warning' : editForm.taskState == 2 ? 'error' : '123'"
-						></u-tag>
-					</u-form-item>
-					<u-form-item label="项目开始时间" labelWidth="100" prop="taskStartTime" borderBottom>
-						<u--input v-model="editForm.taskStartTime" border="none" disabled></u--input>
-					</u-form-item>
-					<u-form-item label="项目结束时间" labelWidth="100" prop="taskEndTime" borderBottom>
-						<u--input v-model="editForm.taskEndTime" border="none" disabled></u--input>
-					</u-form-item>
-				</u--form>
-			</view>
-		</u-overlay>
-		<u-modal
-			confirmColor="#dd524d"
-			cancelColor="#007aff"
-			:show="deleteShow"
-			confirmText="确认"
-			cancelText="取消"
-			showCancelButton
-			content="是否确认删除该任务信息？"
-			@confirm="deleteTask()"
-			@cancel="deleteShow = false"
-		></u-modal>
 	</view>
 </template>
 
@@ -122,8 +77,6 @@ export default {
 			count: 0,
 			// 获取客户数量
 			clientCount: 0,
-			show: false,
-			deleteShow: false,
 			taskId: 0,
 			options2: [
 				{
@@ -146,10 +99,9 @@ export default {
 	},
 	onShow() {
 		this.getWather();
-		this.getTask();
 		this.getLoginUser();
-		this.getdeviceList()
-		this.getClient()
+		this.getdeviceList();
+		this.getClient();
 	},
 	methods: {
 		getWather() {
@@ -165,95 +117,44 @@ export default {
 				}
 			});
 		},
-		getLoginUser(){
-			this.loginUser = uni.getStorageSync('loginUser')
-			console.log(this.loginUser)
+		getLoginUser() {
+			this.loginUser = uni.getStorageSync('loginUser');
+			console.log(this.loginUser);
 		},
-		getdeviceList(){
+		getdeviceList() {
 			this.$sendRequest({
 				url: 'deviceModel',
 				method: 'GET',
 				success: res => {
-					this.count = res.data.count
+					this.count = res.data.count;
 				}
-			})
+			});
 		},
-		getClient(){
+		getClient() {
 			this.$sendRequest({
 				url: 'showUserGroup',
-				success: (res) => {
-					const userChild = res.data.data
-					const childArr = []
-					for(let i = 0; i < userChild.length; i++) {
-						if(userChild[i].userLimit === '3'){
-							childArr.push(userChild[i].userLimit)
+				success: res => {
+					const userChild = res.data.data;
+					const childArr = [];
+					for (let i = 0; i < userChild.length; i++) {
+						if (userChild[i].userLimit === '3') {
+							childArr.push(userChild[i].userLimit);
 						}
 					}
-					this.clientCount = childArr.length
-				}
-			})
-		},
-		getTask() {
-			this.$sendRequest({
-				url: `showUserTaskInfo/${1}`,
-				method: 'POST',
-				success: res => {
-					console.log(res.data.data);
-					this.tasklist = res.data.data;
-				},
-				fail: fa => {
-					console.log(fa);
+					this.clientCount = childArr.length;
 				}
 			});
 		},
-		editTask(index, taskId) {
-			if (!index) {
-				// 查看
-				this.$sendRequest({
-					url: `showUserTaskById/${taskId}`,
-					method: 'GET',
-					success: res => {
-						this.editForm = res.data.data;
-						console.log(this.editForm);
-					},
-					fail: fa => {
-						console.log(fa);
-					}
-				});
-				this.show = true;
-			} else {
-				this.deleteShow = true;
-				this.taskId = taskId;
-			}
-		},
-		deleteTask() {
-			this.$sendRequest({
-				url: `deleteTask/${this.taskId}`,
-				success: res => {
-					console.log(res.data);
-				},
-				fail: fa => {
-					console.log(fa);
-				}
-			});
-			this.deleteShow = false;
-			uni.showToast({
-				title: "删除成功"
-			})
-			setTimeout(() => {
-				this.getTask();
-			}, 500)
-		}
 	}
 };
 </script>
 
 <style lang="scss" scoped>
 span {
-	color: #cccccc;
+	color: #fff;
 }
 .iconfont {
-	color: #cccccc;
+	color: #fff;
 	font-size: $uni-font-size-sm * 1.5;
 }
 p {
@@ -262,7 +163,7 @@ p {
 .content-herder {
 	width: 100%;
 	height: 300rpx;
-	background-color: $uni-essential;
+	background-color: rgba($color: #000000, $alpha: .5);
 	.span-wather {
 		float: right;
 		margin-top: 60rpx;
@@ -295,7 +196,7 @@ p {
 .content-body {
 	width: 100%;
 	height: 200rpx;
-	background-color: $uni-essential;
+	background-color: rgba($color: #000000, $alpha: .5);
 	border-bottom-left-radius: 375rpx;
 	border-bottom-right-radius: 375rpx;
 }

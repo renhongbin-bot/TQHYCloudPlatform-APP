@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<nav-home :title="title" @userClick="rightClick()"></nav-home>
 		<edit-user>
 			<u--text slot="user" class="user-phone" text="验证码将发送到邮箱"></u--text>
 			<u--text slot="code" class="user-phone" mode="email" :text="email" format="encrypt"></u--text>
@@ -9,24 +10,32 @@
 </template>
 
 <script>
+import NavHome from '@/components/nav/NavHome.vue'
 import EditUser from '@/components/user/EditUser.vue'
 export default {
 	data() {
 		return {
-			email: ''
+			email: '',
+			title: '修改邮箱'
 		};
 	},
 	onLoad(option) {
 		this.email = option.email
 	},
 	components: {
-		EditUser
+		EditUser,
+		NavHome
 	},
 	
 	methods: {
 		gotoEditUserEmailNext() {
 			uni.navigateTo({
 				url: 'edituseremailnext/editUserEmailNext'
+			})
+		},
+		rightClick() {
+			uni.switchTab({
+				url: '/pages/user/user'
 			})
 		}
 	}

@@ -1,22 +1,47 @@
 <template>
 	<view>
+		<nav-home :title="title" @userClick="rightClick()"></nav-home>
 		<u--form>
-			<u-form-item label="用户名:" label-width="150rpx" prop="userName" borderBottom><u--input placeholder="请输入新的用户名" v-model="userInfo.userName" border="none"></u--input></u-form-item>
+			<u-form-item label="用户名:" label-width="150rpx" borderBottom><u--input placeholder="请输入新的用户名" v-model="userName" border="none"></u--input></u-form-item>
 		</u--form>
-		<u-button type="primary" shape="circle" text="确定"></u-button>
+		<u-button type="primary" shape="circle" text="确定" @click="editUserName()"></u-button>
 	</view>
 </template>
 
 <script>
+import NavHome from '@/components/nav/NavHome.vue'
 export default {
 	data() {
 		return {
-			userInfo: {
-				userName: ''
-			}
+			userName: '',
+			title: '修改用户名'
 		};
 	},
-	methods: {}
+	components: {
+		NavHome
+	},
+	methods: {
+		editUserName() {
+			this.$sendRequest({
+				url: `updateUserInfo/${1}?userName=${this.userName}`,
+				methods: 'POST',
+				success: res => {
+					uni.showToast({
+						title: "修改成功",
+						icon:"success"
+					})
+					uni.redirectTo({
+						url: '../accountManagement'
+					})
+				},
+			})
+		},
+		rightClick() {
+			uni.switchTab({
+				url: '/pages/user/user'
+			})
+		}
+	}
 };
 </script>
 

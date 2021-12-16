@@ -1,39 +1,52 @@
 <template>
 	<view>
-		<u--form class="device-form" labelPosition="left" :model="deviceList" ref="form1">
-			<u-form-item labelWidth="150" label="设备Id:" prop="userName" borderBottom ref="item1"><u--input v-model="deviceList.deviceId" border="none"></u--input></u-form-item>
-			<u-form-item labelWidth="150" label="设备名称:" prop="userName" borderBottom ref="item1"><u--input v-model="deviceList.deviceName" border="none"></u--input></u-form-item>
-			<u-form-item labelWidth="150" label="设备从属区域:" prop="userName" borderBottom ref="item1"><u--input v-model="deviceList.deviceAreaName" border="none"></u--input></u-form-item>
-			<u-form-item labelWidth="150" label="设备状态:" prop="userName" borderBottom ref="item1"><u--input v-model="deviceList.deviceState" border="none"></u--input></u-form-item>
-			<u-form-item labelWidth="150" label="设备从属人:" prop="userName" borderBottom ref="item1"><u--input v-model="deviceList.userName" border="none"></u--input></u-form-item>
-			<u-form-item labelWidth="150" label="设备通信Id:" prop="userName" borderBottom ref="item1"><u--input v-model="deviceList.deviceCid" border="none"></u--input></u-form-item>
-		</u--form>
+		<nav-home :title="title" @rightClick="rightClick()"></nav-home>
+		<view class="device-form">
+			<u-cell-group :border="false">
+				<u-cell @click="gotoMachineList(item.slaveId)" v-for="(item, index) in slaveList" :border="true" :title="item.slaveName" isLink></u-cell>
+			</u-cell-group>
+		</view>
 	</view>
 </template>
 
 <script>
+	import NavHome from '@/components/nav/NavHome.vue'
 export default {
 	data() {
 		return {
-			optionList: {},
-			deviceList: {}
+			id: 4,
+			deviceList: {},
+			slaveList: {},
+			title: '从机列表'
 		};
 	},
+	components: {
+		NavHome
+	},
 	onLoad(option) {
-		this.optionList = option;
-		this.getEditList();
+		this.id = option.id
+		this.getSlaveList()
 	},
 	methods: {
-		getEditList() {
+		getSlaveList() {
 			this.$sendRequest({
-				url: `selectDeviceById/${this.optionList.deviceId}`,
+				url: `slaveDeviceList/showSlaveMessage/${this.id}`,
 				methods: 'GET',
 				success: res => {
-					// 将两个对象合并至一个对象
-					this.deviceList = Object.assign(this.optionList, res.data.data);
-					console.log(this.deviceList);
+					console.log(res.data.data)
+					this.slaveList = res.data.data
 				}
-			});
+			})
+		},
+		gotoMachineList(id) {
+			uni.navigateTo({
+				url: `/pages/terminal/machine?id=${id}`
+			})
+		},
+		rightClick() {
+			uni.switchTab({
+				url: '/pages/terminal/terminal'
+			})
 		}
 	}
 };

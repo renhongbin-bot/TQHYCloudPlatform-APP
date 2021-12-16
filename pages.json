@@ -17,111 +17,112 @@
 		}, {
 			"path": "pages/terminal/terminal",
 			"style": {
-				"navigationBarTitleText": "数据终端",
-				"navigationBarTextStyle":"white",
-				"navigationBarBackgroundColor":" #3366CC",
-				"enablePullDownRefresh": false
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
 			}
 
 		}, {
 			"path": "pages/developer/developer",
 			"style": {
-				"navigationBarTitleText": "开发者",
-				"enablePullDownRefresh": false
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
 			}
 
 		}, {
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "用户中心",
-				"enablePullDownRefresh": false
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/user/account/accountManagement",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/user/account/edituser/editUserName",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/user/account/edituser/editUserPhone",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/user/account/edituser/editUserEmail",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/user/account/edituser/editUserPassword",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/user/account/edituser/edituserphonenext/editUserPhoneNext",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/user/account/edituser/edituseremailnext/editUserEmailNext",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/user/journal/journal",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/terminal/EditTerminal",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/terminal/machine",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/terminal/history",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/developer/project",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
 			}
 
 		}
-        ,{
-            "path" : "pages/user/account/accountManagement",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "账户管理",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/user/account/edituser/editUserName",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改用户名",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/user/account/edituser/editUserPhone",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改手机号码",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/user/account/edituser/editUserEmail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改邮箱",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/user/account/edituser/editUserPassword",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改密码",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/user/account/edituser/edituserphonenext/editUserPhoneNext",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改手机号码",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/user/account/edituser/edituseremailnext/editUserEmailNext",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改邮箱",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/user/journal/journal",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "系统日志",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/terminal/EditTerminal",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "详细信息",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
@@ -145,12 +146,20 @@
 			"pagePath": "pages/developer/developer",
 			"iconPath": "static/images/developer.png",
 			"selectedIconPath": "static/images/developer-color.png",
-			"text": "开发者"
+			"text": "工单管理"
 		}, {
 			"pagePath": "pages/user/user",
 			"iconPath": "static/images/user.png",
 			"selectedIconPath": "static/images/user-color.png",
 			"text": "用户中心"
+		}]
+	},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
 	}
 }

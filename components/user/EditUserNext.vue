@@ -5,12 +5,10 @@
 		</view>
 		<view class="get_code">
 			<u--input border="bottom" placeholder="请输入验证码">
-				<!-- #endif -->
 				<template slot="suffix">
 					<u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
 					<u-button @tap="getCode" :text="tips" type="success" size="mini"></u-button>
 				</template>
-				<!-- #ifndef APP-NVUE -->
 			</u--input>
 			<slot name="succeed"></slot>
 		</view>

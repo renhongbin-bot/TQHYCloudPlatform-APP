@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<nav-home :title="title" @userClick="rightClick()"></nav-home>
 		<edit-user-next>
 			<u--input slot="newcode" border="bottom" placeholder="请输入新的邮箱地址">
 			</u--input>
@@ -9,18 +10,24 @@
 </template>
 
 <script>
+	import NavHome from '@/components/nav/NavHome.vue'
 	import EditUserNext from '@/components/user/EditUserNext.vue'
 	export default {
 		data() {
 			return {
-				
+				title: '修改邮箱'
 			}
 		},
 		components: {
-			EditUserNext
+			EditUserNext,
+			NavHome
 		},
 		methods: {
-			
+			rightClick() {
+				uni.switchTab({
+					url: '/pages/user/user'
+				})
+			}
 		}
 	}
 </script>

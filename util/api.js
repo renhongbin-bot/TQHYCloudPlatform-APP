@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8081/'
+const BASE_URL = 'http://106.12.134.175:8081/'
 
 
 export const sendRequest = (options) => {
@@ -11,7 +11,8 @@ export const sendRequest = (options) => {
 		},
 		fail: (err) => {
 			uni.showToast({
-				title: "请求接口失败"
+				title: "请求接口失败",
+				icon: "error"
 			})
 			console.log(err)
 		}
