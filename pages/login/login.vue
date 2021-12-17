@@ -52,12 +52,12 @@
 				<u-button @click="login" type="primary" shape="circle" text="登录"></u-button>
 			</view>
 			<view class="_register" v-show="index == 1">
-				<u--input border="bottom" class="phone-inp" placeholder="请输入手机号" prefixIcon="phone" prefixIconStyle="font-size: 44rpx;color: #007aff"></u--input>
+				<u--input border="bottom" class="phone-inp" v-model="registerPhone" placeholder="请输入手机号" prefixIcon="phone" prefixIconStyle="font-size: 44rpx;color: #007aff"></u--input>
 				<u--input prefixIconStyle="font-size: 44rpx;color: #007aff" class="code-text" prefixIcon="more-circle" border="bottom" placeholder="请输入验证码">
 					<!-- #endif -->
 					<template slot="suffix">
 						<u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
-						<u-button @tap="getCode" :text="tips" type="success" size="mini"></u-button>
+						<u-button @tap="getCode(registerPhone)" :text="tips" type="success" size="mini"></u-button>
 					</template>
 					<!-- #ifndef APP-NVUE -->
 				</u--input>
@@ -85,6 +85,7 @@ export default {
 				userName: '',
 				userPassword: ''
 			},
+			registerPhone: '',
 			list: [
 				{
 					name: '登录'
@@ -190,9 +191,17 @@ export default {
 		codeChange(text) {
 			this.tips = text;
 		},
-		getCode() {
+		getCode(userPhone) {
 			if (this.$refs.uCode.canGetCode) {
+				console.log(userPhone)
 				// 模拟向后端请求验证码
+				this.$sendRequest({
+					url: `api/getIdentifyCodeUnsafe?userPhone=${userPhone}`,
+					data: userPhone,
+					success: res => {
+						// console.log(res.data)
+					}
+				})
 				uni.showLoading({
 					title: '正在获取验证码'
 				});
@@ -206,6 +215,7 @@ export default {
 			} else {
 				uni.$u.toast('倒计时结束后再发送');
 			}
+			
 		},
 		change(e) {
 			console.log('change', e);

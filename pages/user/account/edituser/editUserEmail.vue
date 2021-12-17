@@ -1,17 +1,17 @@
 <template>
 	<view>
 		<nav-home :title="title" @userClick="rightClick()"></nav-home>
-		<edit-user>
+		<!-- <edit-user>
 			<u--text slot="user" class="user-phone" text="验证码将发送到邮箱"></u--text>
 			<u--text slot="code" class="user-phone" mode="email" :text="email" format="encrypt"></u--text>
 			<u-button slot="next" @click="gotoEditUserEmailNext" type="primary" shape="circle" text="下一步"></u-button>
-		</edit-user>
+		</edit-user> -->
 	</view>
 </template>
 
 <script>
 import NavHome from '@/components/nav/NavHome.vue'
-import EditUser from '@/components/user/EditUser.vue'
+// import EditUser from '@/components/user/EditUser.vue'
 export default {
 	data() {
 		return {
@@ -23,7 +23,7 @@ export default {
 		this.email = option.email
 	},
 	components: {
-		EditUser,
+		// EditUser,
 		NavHome
 	},
 	
