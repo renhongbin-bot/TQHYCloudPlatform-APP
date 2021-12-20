@@ -3,6 +3,7 @@
 		<live-pusher id="livePusher" :url="camAdress" mode="FHD"></live-pusher>
 		<button @click="startLive">开始推流（开始直播）</button>
 		<view>
+			{{camAdress}}
 			<video
 				id="myVideo"
 				:src="camAdress"
@@ -23,8 +24,9 @@ export default {
 			context: null
 		};
 	},
-	onReady() {
+	computed() {
 		this.context = uni.createLivePusherContext('livePusher', this);
+		console.log(this.camAdress)
 	},
 	methods: {
 		EnableCamera() {

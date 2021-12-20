@@ -84,10 +84,10 @@
 					prefixIcon="phone"
 					prefixIconStyle="font-size: 44rpx;color: #007aff"
 				></u--input>
-				<u--input prefixIconStyle="font-size: 44rpx;color: #007aff" class="code-text" prefixIcon="more-circle" border="bottom" placeholder="请输入验证码">
+				<u--input v-model="code" prefixIconStyle="font-size: 44rpx;color: #007aff" class="code-text" prefixIcon="more-circle" border="bottom" placeholder="请输入验证码">
 					<!-- #endif -->
 					<template slot="suffix">
-						<u-code v-model="code" ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
+						<u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
 						<u-button @tap="getCode(registerPhone)" :text="tips" type="success" size="mini" :disabled="dis"></u-button>
 					</template>
 					<!-- #ifdef APP-NVUE -->
@@ -291,7 +291,7 @@ export default {
 					uni.$u.toast('验证码已发送');
 					// 通知验证码组件内部开始倒计时
 					this.$refs.uCode.start();
-				}, 500);
+				}, 1000);
 			} else {
 				uni.$u.toast('倒计时结束后再发送');
 			}
