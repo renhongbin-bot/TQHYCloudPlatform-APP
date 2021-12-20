@@ -32,15 +32,39 @@
 						</u-form-item>
 						<u-form-item prop="userPassword">
 							<u--input
+							 v-show="cut === 0"
+								ref="itp"
 								v-model="loginForm.userPassword"
 								class="input-pwd"
 								border="bottom"
 								type="password"
 								placeholder="请输入密码"
-								suffixIcon="eye"
 								prefixIcon="lock"
 								prefixIconStyle="font-size: 44rpx;color: #007aff"
-							></u--input>
+							>
+							<!-- #endif -->
+							<template slot="suffix">
+								<u-icon name="eye" color="#2979ff" size="22" @click="cut = 1"></u-icon>
+							</template>
+							<!-- #ifdef APP-NVUE -->
+							</u--input>
+							<u--input
+							 v-show="cut === 1"
+								ref="itp"
+								v-model="loginForm.userPassword"
+								class="input-pwd"
+								border="bottom"
+								type="text"
+								placeholder="请输入密码"
+								prefixIcon="lock"
+								prefixIconStyle="font-size: 44rpx;color: #007aff"
+							>
+							<!-- #endif -->
+							<template slot="suffix">
+								<u-icon 	name="eye-off" color="#2979ff" size="22" @click="cut = 0"></u-icon>
+							</template>
+							<!-- #ifdef APP-NVUE -->
+							</u--input>
 						</u-form-item>
 					</u-form>
 				</view>
@@ -52,26 +76,57 @@
 				<u-button @click="login" type="primary" shape="circle" text="登录"></u-button>
 			</view>
 			<view class="_register" v-show="index == 1">
-				<u--input border="bottom" class="phone-inp" v-model="registerPhone" placeholder="请输入手机号" prefixIcon="phone" prefixIconStyle="font-size: 44rpx;color: #007aff"></u--input>
+				<u--input
+					border="bottom"
+					class="phone-inp"
+					v-model="registerPhone"
+					placeholder="请输入手机号"
+					prefixIcon="phone"
+					prefixIconStyle="font-size: 44rpx;color: #007aff"
+				></u--input>
 				<u--input prefixIconStyle="font-size: 44rpx;color: #007aff" class="code-text" prefixIcon="more-circle" border="bottom" placeholder="请输入验证码">
 					<!-- #endif -->
 					<template slot="suffix">
-						<u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
-						<u-button @tap="getCode(registerPhone)" :text="tips" type="success" size="mini"></u-button>
+						<u-code v-model="code" ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
+						<u-button @tap="getCode(registerPhone)" :text="tips" type="success" size="mini" :disabled="dis"></u-button>
 					</template>
-					<!-- #ifndef APP-NVUE -->
+					<!-- #ifdef APP-NVUE -->
 				</u--input>
+				
+				
 				<u--input
 					class="pripwd mrg-bottom"
 					type="password"
 					placeholder="请输入密码"
-					suffixIcon="eye"
-					suffixIconStyle="font-size: 44rpx; color: #007aff"
 					prefixIcon="lock"
 					prefixIconStyle="font-size: 44rpx;color: #007aff"
 					border="bottom"
-				></u--input>
-				<u-button type="primary" shape="circle" text="注册"></u-button>
+					v-model="pwd"
+					v-show="value === 0"
+				>
+				<!-- #endif -->
+				<template slot="suffix">
+					<u-icon name="eye" color="#2979ff" size="22" @click="value = 1"></u-icon>
+				</template>
+				<!-- #ifdef APP-NVUE -->
+				</u--input>
+				<u--input
+					class="pripwd mrg-bottom"
+					type="text"
+					placeholder="请输入密码"
+					prefixIcon="lock"
+					prefixIconStyle="font-size: 44rpx;color: #007aff"
+					border="bottom"
+					v-model="pwd"
+					v-show="value === 1"
+				>
+				<!-- #endif -->
+				<template slot="suffix">
+					<u-icon 	name="eye-off" color="#2979ff" size="22" @click="value = 0"></u-icon>
+				</template>
+				<!-- #ifdef APP-NVUE -->
+				</u--input>
+				<u-button type="primary" shape="circle" text="注册" @click="register(registerPhone, code, pwd)"></u-button>
 			</view>
 		</view>
 	</view>
@@ -81,11 +136,14 @@
 export default {
 	data() {
 		return {
+			// 登录
 			loginForm: {
 				userName: '',
 				userPassword: ''
 			},
+			// 手机号
 			registerPhone: '',
+			// tab切换
 			list: [
 				{
 					name: '登录'
@@ -94,10 +152,17 @@ export default {
 					name: '注册'
 				}
 			],
+			// 验证码
+			code: '',
+			// 密码
+			pwd: '',
+			// 
+			cut: 0,
 			isShow: true,
 			// 控制记住密码
 			checked: true,
 			index: 0,
+			value: 0,
 			tips: '',
 			userlist: [],
 			loginFormRules: {
@@ -108,6 +173,16 @@ export default {
 			}
 		};
 	},
+	computed:{
+		dis() {
+			const RegPhoen = /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
+			if (RegPhoen.test(this.registerPhone)) {
+				return false
+			} else {
+				return true
+			}
+		}
+	},
 	methods: {
 		click(item) {
 			this.index = item.index ? (this.isShow = !this.isShow) : (this.isShow = true);
@@ -117,45 +192,50 @@ export default {
 			this.$sendRequest({
 				url: `app/login?userName=${this.loginForm.userName}&userPassword=${this.loginForm.userPassword}`,
 				success: res => {
-					if (res.data.state === "200") {
-						console.log(res.data);
-						this.userlist = res.data.loginUser;
-						console.log(this.userlist);
-						// window.sessionStorage.setItem('userToken', res.data.userToken);
-						uni.setStorageSync('loginUser', res.data.loginUser);
-						uni.showToast({
-							title: "登录成功"
-						});
-						// if (this.checked === true) {
-						// 	this.setCookie(this.loginForm.userName, this.loginForm.userPassword, 2);
-						// } else {
-						// 	this.clearCookie();
-						// }
-						setTimeout(() => {
-							uni.switchTab({
-								url: '../index/index'
+					switch (res.data.state) {
+						case '200':
+							console.log(res.data);
+							this.userlist = res.data.loginUser;
+							console.log(this.userlist);
+							// window.sessionStorage.setItem('userToken', res.data.userToken);
+							uni.setStorageSync('loginUser', res.data.loginUser);
+							uni.showToast({
+								title: '登录成功'
 							});
-						}, 200)
-					} else if (res.data.state === '40001') {
-						uni.showToast({
-							title: '用户名不存在',
-							icon: 'none'
-						});
-					} else if (res.data.state === '40002') {
-						uni.showToast({
-							title: '密码错误',
-							icon: 'none'
-						});
-					} else if (res.data.state === '40003') {
-						uni.showToast({
-							title: '用户被锁定，不能登录',
-							icon: 'none'
-						});
-					} else if (res.data.state === '40004') {
-						uni.showToast({
-							title: '无法识别的错误',
-							icon: 'none'
-						});
+							// if (this.checked === true) {
+							// 	this.setCookie(this.loginForm.userName, this.loginForm.userPassword, 2);
+							// } else {
+							// 	this.clearCookie();
+							// }
+							setTimeout(() => {
+								uni.switchTab({
+									url: '../index/index'
+								});
+							}, 200);
+							break;
+						case '40001':
+							uni.showToast({
+								title: '用户名不存在',
+								icon: 'none'
+							});
+							break;
+						case '40002':
+							uni.showToast({
+								title: '密码错误',
+								icon: 'none'
+							});
+							break;
+						case '40003':
+							uni.showToast({
+								title: '用户被锁定，不能登录',
+								icon: 'none'
+							});
+							break;
+						case '40004':
+							uni.showToast({
+								title: '无法识别的错误',
+								icon: 'none'
+							});
 					}
 				}
 			});
@@ -193,7 +273,7 @@ export default {
 		},
 		getCode(userPhone) {
 			if (this.$refs.uCode.canGetCode) {
-				console.log(userPhone)
+				console.log(userPhone);
 				// 模拟向后端请求验证码
 				this.$sendRequest({
 					url: `api/getIdentifyCodeUnsafe?userPhone=${userPhone}`,
@@ -201,7 +281,7 @@ export default {
 					success: res => {
 						// console.log(res.data)
 					}
-				})
+				});
 				uni.showLoading({
 					title: '正在获取验证码'
 				});
@@ -215,7 +295,14 @@ export default {
 			} else {
 				uni.$u.toast('倒计时结束后再发送');
 			}
-			
+		},
+		register(userPhone, code, pwd) {
+			this.$sendRequest({
+				url: `app/register?userPhone=${userPhone}&code=${code}&userPassword=${pwd}`,
+				success: res => {
+					console.log(res.data)
+				}
+			})
 		},
 		change(e) {
 			console.log('change', e);

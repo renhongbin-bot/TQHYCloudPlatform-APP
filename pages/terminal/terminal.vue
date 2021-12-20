@@ -9,12 +9,15 @@
 		<u-tabs :list="list1" @click="click" lineWidth="50" lineColor="#fff" inactiveStyle="{ color: '#706266', fontSize: '10rpx' }"></u-tabs>
 		<view v-if="index === 0"><iot></iot></view>
 		<view v-else-if="index === 1"><alarm></alarm></view>
+		<view v-else-if="index === 2"><camera-look></camera-look></view>
 	</view>
 </template>
 
 <script>
 import Iot from '@/components/terminal/Iot.vue';
 import Alarm from '@/components/terminal/Alarm.vue';
+import CameraLook from '@/components/terminal/CameraLook.vue'
+
 import Nav from '@/components/nav/Nav.vue'
 export default {
 	data() {
@@ -25,6 +28,9 @@ export default {
 				},
 				{
 					name: '报警信息'
+				},
+				{
+					name: '摄像头'
 				}
 			],
 			index: 0
@@ -33,11 +39,13 @@ export default {
 	components: {
 		Iot,
 		Alarm,
+		CameraLook,
 		Nav
 	},
 	methods: {
 		click(item) {
 			this.index = item.index
+			console.log(this.index)
 		}
 	}
 };

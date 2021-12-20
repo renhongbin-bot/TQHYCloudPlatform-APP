@@ -26,26 +26,35 @@ export default {
 			tips: '',
 			userPhone: '',
 			code: '',
-			dis: true
 		};
 	},
+	computed:{
+		dis() {
+			const RegPhoen = /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
+			if (RegPhoen.test(this.userPhone)) {
+				return false
+			} else {
+				return true
+			}
+		}
+	},
 	onLoad() {
-		this.matePhone()
 	},
 	methods: {
 		codeChange(text) {
 			this.tips = text;
 		},
-		matePhone() {
-			const RegPhoen = /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
-			console.log(RegPhoen.test(this.userPhone))
-			if (RegPhoen.test(this.userPhone)) {
-				this.dis = false
-			}
-		},
 		getCode(Phone) {
 			if (this.$refs.uCode.canGetCode) {
+				console.log(userPhone);
 				// 模拟向后端请求验证码
+				this.$sendRequest({
+					url: `api/getIdentifyCodeUnsafe?userPhone=${userPhone}`,
+					data: userPhone,
+					success: res => {
+						// console.log(res.data)
+					}
+				});
 				uni.showLoading({
 					title: '正在获取验证码'
 				});

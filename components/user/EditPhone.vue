@@ -67,21 +67,25 @@ export default {
 				url: `CheckIdentifyCode?code=${code}`,
 				success: res => {
 					console.log(res.data);
-					if (res.data.state === 200) {
-						this.$emit('editUserPhoneNext');
-					} else if (res.data.state === 40001) {
-						uni.showToast({
-							title: '验证码不正确',
-							icon: 'none',
-							duration: 1000
-						});
-					} else if (res.data.state === 40002) {
-						uni.showToast({
-							title: '验证码不存在',
-							icon: 'none',
-							duration: 1000
-						});
-					} else if (res.data.state === 40003) {
+					switch(res.data.state) {
+						case 200:
+							this.$emit('editUserPhoneNext');
+							break
+						case 40001:
+							uni.showToast({
+								title: '验证码不正确',
+								icon: 'none',
+								duration: 1000
+							});
+							break;
+						case 40002:
+							uni.showToast({
+								title: '验证码不存在',
+								icon: 'none',
+								duration: 1000
+							});
+							break;
+						case 40003:
 						uni.showToast({
 							title: '请输入验证码',
 							icon: 'none',

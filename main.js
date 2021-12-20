@@ -10,6 +10,9 @@ import uView from 'uview-ui'
 import { sendRequest } from './util/api.js'
 Vue.prototype.$sendRequest = sendRequest
 Vue.config.productionTip = false
+
+import Videojs from 'video.js'
+import 'video.js/dist/video-js.css'
 App.mpType = 'app'
 const app = new Vue({
     ...App,
