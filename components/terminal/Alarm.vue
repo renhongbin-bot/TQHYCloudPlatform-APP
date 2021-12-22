@@ -2,15 +2,22 @@
 	<view>
 		<view><u-search class="search" placeholder="请输入报警信息" v-model="search" :showAction="false"></u-search></view>
 		<view class="search checkbox">
-			 <u-swipe-action>
-			        <u-swipe-action-item v-for="(item, index) in tables" :index="index" :options="options3" :key="alarmList.warningId" @click="editAlarmList($event.index, item)">
-			          <view class="swipe-action u-border-bottom">
-			            <view class="swipe-action__content">
-			              <text class="swipe-action__content__text">{{item.warningMessage}}</text>
-			            </view>
-			          </view>
-			        </u-swipe-action-item>
-			      </u-swipe-action>
+			 <view v-for="(item,index) in tables">
+				<u--form>
+					<u-form-item>
+						<u-input
+						    border="bottom"
+						    v-model="item.warningMessage"
+								disabled
+								disabledColor="#fff"
+						  >
+							<template slot="suffix">
+								<u-icon @click="editAlarmList(item)" name="eye" color="#555" size="28"></u-icon>
+							</template>
+							</u-input>
+					</u-form-item>
+				</u--form>
+			 </view>
 			<u-overlay :show="show" @click="show=false">
 				<view class="warp">
 					<u--form class="form-bgc" labelPosition="left" :model="editForm" ref="form1">
@@ -24,17 +31,6 @@
 					</u--form>
 				</view>
 			</u-overlay>
-			<u-modal
-				confirmColor="#dd524d"
-				cancelColor="#007aff"
-				:show="deleteShow"
-				confirmText="确认"
-				cancelText="取消"
-				showCancelButton
-				content="是否确认删除该报警信息？"
-				@confirm="deleteAlarm()"
-				@cancel="deleteShow = false"
-			></u-modal>
 		</view>
 	</view>
 </template>
@@ -43,20 +39,6 @@
 export default {
 	data() {
 		return {
-			options3: [
-				{
-					text: '详情',
-					style: {
-						backgroundColor: '#006699'
-					}
-				},
-				{
-					text: '删除',
-					style: {
-						backgroundColor: '#f56c6c'
-					}
-				}
-			],
 			search: '',
 			alarmList: [],
 			editForm: {},
@@ -100,8 +82,7 @@ export default {
 				}
 			});
 		},
-		editAlarmList(index, item) {
-			if(!index) {
+		editAlarmList(item) {
 				this.$sendRequest({
 					url: `showUserWarningInfoById/${item.warningId}`,
 					success: res => {
@@ -110,29 +91,9 @@ export default {
 						this.show = true
 					}
 				})
-			} else {
-				this.deleteIds = this.deleteIds.push(item.warningId)
-				console.log(this.deleteIds)
-				this.deleteShow = true
 			}
-		},
-		deleteAlarm() {
-			this.$sendRequest({
-				url: `deleteWarningMessageByIds/${this.deleteIds}`,
-				success: res => {
-					console.log(res.data.data)
-				}
-			})
-			this.deleteShow = false
-			uni.showToast({
-				title: '删除成功'
-			});
-			setTimeout(() => {
-				this.getAlarmList();
-			}, 500);
 		}
 	}
-};
 </script>
 
 <style lang="scss" scoped>

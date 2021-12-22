@@ -30,6 +30,10 @@ export default {
 						title: "修改成功",
 						icon:"success"
 					})
+					// 修改storage中的信息
+					let loginUser = uni.getStorageSync('loginUser')
+					loginUser.userName = this.userName
+					uni.setStorageSync('loginUser', loginUser)
 					uni.redirectTo({
 						url: '../accountManagement'
 					})

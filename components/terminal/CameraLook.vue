@@ -1,7 +1,8 @@
 <template>
 	<view>
+		<view><u-search class="search" placeholder="请输入报警信息" v-model="search" :showAction="false"></u-search></view>
 		<u-cell-group class="mar-top">
-				<u-cell @click="gotoCameraVideo(item.webcamAddress)" v-for="(item,index) in cameraList" icon="camera-fill" :index="index" :title="item.webcamName" isLink  :value="item.deviceArea.deviceAreaName"></u-cell>
+				<u-cell @click="gotoCameraVideo(item.webcamId)" v-for="(item,index) in tables" icon="camera-fill" :index="index" :title="item.webcamName" isLink  :value="item.deviceArea.deviceAreaName"></u-cell>
 			</u-cell-group>
 	</view>
 </template>
@@ -11,7 +12,30 @@
 		name: 'CameraLook',
 		data() {
 			return {
-				cameraList: []
+				cameraList: [],
+				search: ''
+			}
+		},
+		computed: {
+			tables: {
+				get() {
+					const search = this.search;
+					if (search) {
+						return this.cameraList.filter(function(dataNews) {
+							return Object.keys(dataNews).some(function(key) {
+								return (
+									String(dataNews[key])
+										.toLowerCase()
+										.indexOf(search) > -1
+								);
+							});
+						});
+					}
+					return this.cameraList;
+				},
+				set(newValue) {
+					return newValue;
+				}
 			}
 		},
 		created() {
@@ -27,9 +51,9 @@
 					}
 				})
 			},
-			gotoCameraVideo(camId) {
+			gotoCameraVideo(webcamId) {
 				uni.navigateTo({
-					url: `/pages/terminal/cameraVideo?camId=${camId}`
+					url: `/pages/terminal/cameraVideo?id=${webcamId}`
 				})
 			}
 		}

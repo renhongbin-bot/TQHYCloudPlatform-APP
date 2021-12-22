@@ -47,7 +47,7 @@
 		methods: {
 			// 退出登录
 			gotoLogin() {
-				uni.clearStorage();
+				uni.removeStorageSync('loginUser')
 				uni.reLaunch({
 					url: '../login/login'
 				})

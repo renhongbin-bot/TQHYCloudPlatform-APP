@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<nav-home :title="title" @userClick="rightClick()"></nav-home>
-		<edit-user-next @accountManagement="rightClick()">
+		<edit-user-next @getBack="rightClick()">
 			
 		</edit-user-next>
 	</view>
@@ -26,7 +26,7 @@ export default {
 			uni.switchTab({
 				url: '/pages/user/user'
 			})
-		}
+		},
 	}
 };
 </script>

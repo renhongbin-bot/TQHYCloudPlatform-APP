@@ -3,10 +3,10 @@
 		<u-cell-group :border="false">
 			<u-cell url="./edituser/editUserName" :border="false" title="修改用户名" :value="name" isLink></u-cell>
 			<u-cell @click="gotoEditUserPhone" :border="false" title="修改手机号" isLink>
-				<u--text mode="text" :call="false" class="text-phone" slot="value" :text="phone" format="encrypt"></u--text>
+				<u--text mode="phone" :call="false" class="text-phone" slot="value" :text="phone" format="encrypt"></u--text>
 			</u-cell>
 			<u-cell @click="gotoEditUserEmail" :border="false" title="修改邮箱" isLink>
-				<u--text type="email" class="text-email" slot="value" :text="email" format="encrypt"></u--text>
+				<u--text mode="email" type="email" class="text-email" slot="value" :text="email" format="encrypt"></u--text>
 			</u-cell>
 			<u-cell url="./edituser/editUserPassword" :border="false" title="修改密码" isLink></u-cell>
 		</u-cell-group>

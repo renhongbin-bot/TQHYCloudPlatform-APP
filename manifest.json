@@ -82,7 +82,26 @@
             }
         },
         "nvueLaunchMode" : "",
-        "nvueCompiler" : "weex"
+        "nvueCompiler" : "uni-app",
+        "nativePlugins" : {
+            "hk-preview" : {
+                "__plugin_info__" : {
+                    "name" : "海康视频实时预览插件",
+                    "description" : "海康摄像头录像机直连插件，实现设备视频预览和云台控制",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=1981",
+                    "android_package_name" : "uni.UNID3C17D8",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "1981",
+                    "parameters" : {}
+                }
+            }
+        },
+        "uniStatistics" : {
+            "enable" : true
+        }
     },
     /* 快应用特有相关 */
     "quickapp" : {},
@@ -114,6 +133,7 @@
         "router" : {
             "base" : "",
             "mode" : "hash"
-        }
+        },
+        "template" : "index.html"
     }
 }

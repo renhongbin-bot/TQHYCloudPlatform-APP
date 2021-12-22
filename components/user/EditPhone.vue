@@ -2,15 +2,15 @@
 	<view>
 		<view class="get_code_text">
 			<u--text class="user-phone" text="验证码将发送到手机"></u--text>
-			<u--text class="user-phone" mode="name" :text="userPhone" format="encrypt"></u--text>
+			<u--text class="user-phone" mode="phone" :text="userPhone" format="encrypt"></u--text>
 		</view>
 		<view class="get_code">
-			<u--input border="bottom" v-model="code" placeholder="请输入验证码">
+			<u-input border="bottom" v-model="code" placeholder="请输入验证码">
 				<template slot="suffix">
 					<u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
 					<u-button @tap="getCode(userPhone)" :text="tips" type="success" size="mini"></u-button>
 				</template>
-			</u--input>
+			</u-input>
 			<u-button @click="next(code)" type="primary" shape="circle" text="下一步"></u-button>
 		</view>
 	</view>
