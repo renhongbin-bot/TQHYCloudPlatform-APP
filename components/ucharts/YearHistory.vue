@@ -12,10 +12,16 @@
 
 <script>
 	export default {
-		props: ['machineId'],
+		props: {
+			machineId: {
+				type: Number,
+				default: 0
+			}
+		},
 		data() {
 			return {
 				dayHistoryList: {},
+				id: this.machineId,
 				chartData:{
 				  categories:[],
 				  series:[{
@@ -25,17 +31,22 @@
 				},
 			}
 		},
-		created() {
-			this.getDayHistoryList( )
+		watch: {
+			machineId(newValue) {
+				this.id = newValue
+			}
+		},
+		mounted() {
+			this.getDayHistoryList()
 		},
 		methods: {
-			getDayHistoryList() {
-				this.$sendRequest({
-					url: `getNewYearDataForEcharts/${this.machineId}`,
+			async getDayHistoryList() {
+				await this.$sendRequest({
+					url: `getNewYearDataForEcharts/${this.id}`,
 					success: res => {
-						console.log(res.data)
 						const daylist = res.data.data
-						console.log(daylist)
+						this.chartData.series[0].data = []
+						this.chartData.categories = []
 						for(let i = 0; i < daylist.length; i++) {
 							this.chartData.categories.push(parseInt(daylist[i].hDate))
 						}

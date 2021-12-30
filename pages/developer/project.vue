@@ -1,195 +1,103 @@
 <template>
 	<view>
-		<nav-home :title="title" @developer="rightClick()"></nav-home>
-		<view><u-search class="search" placeholder="请输入项目名称" v-model="search" :showAction="false"></u-search></view>
-		<view class="search checkbox">
-			<u-swipe-action>
-				<u-swipe-action-item v-for="(item, index) in tables" :index="index" :key="item.taskId" :options="options2" @click="editTask($event.index, item.taskId)">
-					<view class="swipe-action u-border-bottom">
-						<view class="swipe-action__content">
-							<text class="swipe-action__content__text">{{ item.taskName }}</text>
-						</view>
-					</view>
-				</u-swipe-action-item>
-			</u-swipe-action>
-			<u-overlay :show="show" @click="show = false">
-				<view class="warp">
-					<u--form labelPosition="left" :model="editForm" label="详细信息" class="form-bgc">
-						<u-form-item label="项目Id" labelWidth="100" borderBottom><u--text :text="editForm.taskId"></u--text></u-form-item>
-						<u-form-item label="项目名称" labelWidth="100" borderBottom><u--text :text="editForm.taskName"></u--text></u-form-item>
-						<u-form-item label="详细信息" labelWidth="100" borderBottom><u--text :text="editForm.taskContent"></u--text></u--input></u-form-item>
-						<u-form-item label="项目状态" labelWidth="100" borderBottom>
-							<u-tag
-								:text="editForm.taskState == 0 ? '已完成' : editForm.taskState == 1 ? '进行中' : editForm.taskState == 2 ? '已过期' : '123'"
-								:type="editForm.taskState == 0 ? 'success' : editForm.taskState == 1 ? 'warning' : editForm.taskState == 2 ? 'error' : '123'"
-							></u-tag>
-						</u-form-item>
-						<u-form-item label="项目开始时间" labelWidth="100" borderBottom>
-							<u--text :text="editForm.taskStartTime"></u--text>
-						</u-form-item>
-						<u-form-item label="项目结束时间" labelWidth="100" borderBottom>
-							<u--text :text="editForm.taskEndTime"></u--text>
-						</u-form-item>
-					</u--form>
-				</view>
-			</u-overlay>
-			<u-modal
-				confirmColor="#dd524d"
-				cancelColor="#007aff"
-				:show="deleteShow"
-				confirmText="确认"
-				cancelText="取消"
-				showCancelButton
-				content="是否确认删除该任务信息？"
-				@confirm="deleteTask()"
-				@cancel="deleteShow = false"
-			></u-modal>
-		</view>
+		<nav-home title="工单下发" @developer="rightClick()"></nav-home>
+		<u--form class="form" labelPosition="left" :model="addOrder" :rules="rules">
+			<u-form-item class="mar-top" label="工单名称:" labelWidth="150rpx" prop="name" borderBottom><u--input v-model="addOrder.name" border="none"></u--input></u-form-item>
+			<u-form-item class="mar-top" label="任务详尽:" labelWidth="150rpx" prop="message" borderBottom>
+				<u--textarea placeholder="不低于3个字" v-model="addOrder.message" count></u--textarea>
+			</u-form-item>
+			<u-form-item class="mar-top" label="开始时间" prop="hotel" labelWidth="80" borderBottom @click="showCalendar = true">
+				<u--input v-model="addOrder.startTime" disabled disabledColor="#ffffff" placeholder="请选择住开始时间" border="none"></u--input>
+				<u-icon slot="right" name="arrow-right"></u-icon>
+			</u-form-item>
+			<u-form-item class="mar-top" label="结束时间" prop="hotel" labelWidth="80" borderBottom @click="show = true">
+				<u--input v-model="addOrder.endTime" disabled disabledColor="#ffffff" placeholder="请选择住结束时间" border="none"></u--input>
+				<u-icon slot="right" name="arrow-right"></u-icon>
+			</u-form-item>
+			<u-button class="mar-top" text="创建工单" type="primary"></u-button>
+		</u--form>
+		<u-datetime-picker v-model="addOrder.endTime || addOrder.startTime" @confirm="confirm" @cancel="cancel" :minDate="1587525000000" :show="showCalendar || show" mode="datetime">
+		</u-datetime-picker>
 	</view>
 </template>
 
 <script>
-	import NavHome from '@/components/nav/NavHome.vue'
-	export default {
-		data() {
-			return {
-				title: '用户项目',
-				userId: 0,
-				projectList: [],
-				editForm: {},
-				search: '',
-				deleteShow: false,
-				show: false,
-				options2: [
-					{
-						text: '详情',
-						style: {
-							backgroundColor: '#006699'
-						}
-					},
-					{
-						text: '删除',
-						style: {
-							backgroundColor: '#f56c6c'
-						}
-					}
-				]
-			}
-		},
-		computed: {
-			tables: {
-				get() {
-					const search = this.search;
-					if (search) {
-						return this.projectList.filter(function(dataNews) {
-							return Object.keys(dataNews).some(function(key) {
-								return (
-									String(dataNews[key])
-										.toLowerCase()
-										.indexOf(search) > -1
-								);
-							});
-						});
-					}
-					return this.projectList;
+import NavHome from '@/components/nav/NavHome.vue';
+export default {
+	data() {
+		return {
+			userId: 0,
+			showCalendar: false,
+			show: false,
+			addOrder: {
+				name: '',
+				message: '',
+				startTime: Number(new Date()),
+				endTime: Number(new Date())
+			},
+			rules: {
+				name: {
+					type: 'string',
+					required: true,
+					message: '请填写工单名称',
+					trigger: ['blur', 'change']
 				},
-				set(newValue) {
-					return newValue;
+				message: {
+					type: 'string',
+					required: true,
+					message: '请填写任务信息',
+					trigger: ['blur', 'change']
 				}
 			}
+		};
+	},
+	components: {
+		NavHome
+	},
+	onLoad(option) {
+		this.userId = option.id;
+		this.getDateTime()
+	},
+	methods: {
+		rightClick() {
+			uni.switchTab({
+				url: '/pages/developer/developer'
+			});
 		},
-		components: {
-			NavHome
+		getDateTime() {
+			const time = uni.$u.timeFormat
+			this.addOrder.startTime = time(this.addOrder.startTime, 'yyyy-mm-dd hh:MM')
+			this.addOrder.endTime = time(this.addOrder.endTime, 'yyyy-mm-dd hh:MM')
 		},
-		onLoad(option) {
-			this.userId = option.id
-			this.getProjectList()
+		confirm(e) {
+			const timeFormat = uni.$u.timeFormat
+			const timer = 	timeFormat(e.value, 'yyyy-mm-dd hh:MM')
+			if(this.show) {
+				this.addOrder.endTime = timer
+				this.show = false
+			} else {
+				this.addOrder.startTime = timer
+				this.showCalendar = false
+			}
+			console.log(timer)
 		},
-		methods: {
-			getProjectList() {
-				this.$sendRequest({
-					url: `showUserTaskInfo/${this.userId}`,
-					success: res => {
-						this.projectList = res.data.data
-						console.log(this.projectList)
-					}
-				})
-			},
-			editTask(index, taskId) {
-				if (!index) {
-					// 查看
-					this.$sendRequest({
-						url: `showUserTaskById/${taskId}`,
-						method: 'GET',
-						success: res => {
-							this.editForm = res.data.data;
-							console.log(this.editForm);
-						},
-						fail: fa => {
-							console.log(fa);
-						}
-					});
-					this.show = true;
-				} else {
-					this.deleteShow = true;
-					this.taskId = taskId;
-				}
-			},
-			deleteTask() {
-				this.$sendRequest({
-					url: `deleteTask/${this.taskId}`,
-					success: res => {
-						console.log(res.data);
-					},
-					fail: fa => {
-						console.log(fa);
-					}
-				});
-				this.deleteShow = false;
-				uni.showToast({
-					title: '删除成功'
-				});
-				setTimeout(() => {
-					this.getProjectList()
-				}, 500);
-			},
-			rightClick() {
-				uni.switchTab({
-					url: '/pages/developer/developer'
-				})
+		cancel() {
+			if(this.show) {
+				this.show = false
+			} else {
+				this.showCalendar = false
 			}
 		}
 	}
+};
 </script>
 
 <style lang="scss" scoped>
-.swipe-action {
-	&__content {
-		padding: 25rpx 0;
-
-		&__text {
-			font-size: 15px;
-			color: $u-main-color;
-			padding-left: 30rpx;
-		}
-	}
-}
-.warp {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-}
-.form-bgc {
-	background-color: #fff;
-	width: 85%;
-	text-align: center;
-	padding-left: $uni-spacing-row-sm * 2;
-}	
-.search {
+.form {
 	width: 92%;
-	padding-left: 4%;
-	padding-top: 20rpx;
-	padding-bottom: 20rpx;
+	margin-left: 4%;
+}
+.mar-top {
+	margin-top: 50rpx;
 }
 </style>

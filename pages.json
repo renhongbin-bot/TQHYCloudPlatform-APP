@@ -98,14 +98,7 @@
 				"navigationBarTextStyle": "white"
 			}
 
-		}, {
-			"path": "pages/terminal/machine",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white"
-			}
-
-		}, {
+		},{
 			"path": "pages/terminal/history",
 			"style": {
 				"navigationStyle": "custom",
@@ -121,6 +114,20 @@
 
 		}, {
 			"path": "pages/terminal/cameraVideo",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/developer/editTask",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/developer/oderDetails",
 			"style": {
 				"navigationStyle": "custom",
 				"navigationBarTextStyle": "white"

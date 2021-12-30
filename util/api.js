@@ -11,7 +11,7 @@ export const sendRequest = (options) => {
 		},
 		fail: (err) => {
 			uni.showToast({
-				title: "请求接口失败",
+				title: "后台维护中",
 				icon: "error"
 			})
 			console.log(err)

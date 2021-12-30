@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view><u-search class="search" placeholder="请输入报警信息" v-model="search" :showAction="false"></u-search></view>
+		<view><u-search class="search" placeholder="请输入摄像头名称" v-model="search" :showAction="false"></u-search></view>
 		<u-cell-group class="mar-top">
 				<u-cell @click="gotoCameraVideo(item.webcamId)" v-for="(item,index) in tables" icon="camera-fill" :index="index" :title="item.webcamName" isLink  :value="item.deviceArea.deviceAreaName"></u-cell>
 			</u-cell-group>

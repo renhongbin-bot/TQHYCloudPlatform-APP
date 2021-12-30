@@ -67,12 +67,12 @@
 				</view>
 				<!-- 记住密码 -->
 				<view class="_login-remember">
-					<u-checkbox-group class="_remenber" placement="column"><u-checkbox @tap="checked = !checked" :checked="checked" label="记住密码"></u-checkbox></u-checkbox-group>
+					<u-checkbox-group class="_remenber" placement="column"><u-checkbox name="记住密码" :checked="checked" label="记住密码"></u-checkbox></u-checkbox-group>
 				</view>
 				<u-notify message="nihao" :show="true"></u-notify>
 				<u-button @click="login" type="primary" shape="circle" text="登录"></u-button>
 			</view>
-			
+
 			<!-- 验证码登录 -->
 			<view class="code_login" v-show="index === 1">
 				<view class="new_phone">
@@ -82,15 +82,15 @@
 					<u-input class="code-input" border="bottom" placeholder="请输入验证码" v-model="userCode">
 						<u-icon name="chat" color="#2979ff" size="28" slot="prefix"></u-icon>
 						<template slot="suffix">
-							<u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
+							<u-code v-model="userCode" ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
 							<u-button @tap="getCodeLogin(userPhone)" :text="tips" type="success" size="mini" :disabled="Codedis"></u-button>
 						</template>
 					</u-input>
 					<u-button @click="codeLogin(userCode, userPhone)" type="primary" text="登录"></u-button>
 				</view>
 			</view>
-			
-			
+
+			<!-- 注册 -->
 			<view class="_register" v-show="index == 2">
 				<u--input
 					border="bottom"
@@ -164,6 +164,7 @@ export default {
 					name: '注册'
 				}
 			],
+			// 手机号登录
 			userPhone: '',
 			userCode: '',
 			// 验证码
@@ -207,13 +208,13 @@ export default {
 	},
 	onLoad() {
 		const userName = uni.getStorageSync('userName');
-		const userPsw = uni.getStorageSync('userPsw');
-		if(userName && userPsw) {
-			this.loginForm.userName = userName
-			this.loginForm.userPassword = userPsw
+		const userPwd = uni.getStorageSync('userPwd');
+		if (userName && userPwd) {
+			this.loginForm.userName = userName;
+			this.loginForm.userPassword = userPwd;
 		} else {
-			this.loginForm.userName = ''
-			this.loginForm.userPassword = ''
+			this.loginForm.userName = '';
+			this.loginForm.userPassword = '';
 		}
 	},
 	methods: {
@@ -228,18 +229,16 @@ export default {
 					switch (res.data.state) {
 						case '200':
 							this.userlist = res.data.loginUser;
-							uni.setStorageSync('loginUser', res.data.loginUser);
 							uni.showToast({
 								title: '登录成功'
 							});
-							if (this.checked) {
-								uni.setStorageSync('userName',this.loginForm.userName)
-								uni.setStorageSync('userPwd',this.loginForm.userPassword)
+							uni.setStorageSync('loginUser', res.data.loginUser);
+							if(this.checked === true) {
+								uni.setStorageSync('userName', this.loginForm.userName);
+								uni.setStorageSync('userPwd', this.loginForm.userPassword);
 							} else {
-								uni.setStorageSync('userName')
-								uni.setStorageSync('userPwd')
-								this.loginForm.userName = ''
-								this.loginForm.userPassword = ''
+								uni.setStorageSync('userName');
+								uni.setStorageSync('userPwd');
 							}
 							setTimeout(() => {
 								uni.switchTab({
@@ -279,7 +278,6 @@ export default {
 				// 模拟向后端请求验证码
 				this.$sendRequest({
 					url: `api/getIdentifyCodeUnsafe?userPhone=${userPhone}`,
-					data: phone,
 					success: res => {
 						console.log(res.data.state);
 						if (res.data.state === 200) {
@@ -307,24 +305,21 @@ export default {
 			}
 		},
 		codeLogin(userCode, userPhone) {
+			console.log(userPhone)
+			console.log(userCode)
 			this.$sendRequest({
-				url: `app/login?userPhoen=${userPhone}&code=&{userCode}`,
+				url: `app/identifyCodeLogin?userPhone=${userPhone}&code=${userCode}`,
 				success: res => {
+					console.log(res.data)
 					switch (res.data.state) {
 						case '200':
 							console.log(res.data);
 							this.userlist = res.data.loginUser;
 							console.log(this.userlist);
-							// window.sessionStorage.setItem('userToken', res.data.userToken);
 							uni.setStorageSync('loginUser', res.data.loginUser);
 							uni.showToast({
 								title: '登录成功'
 							});
-							// if (this.checked === true) {
-							// 	this.setCookie(this.loginForm.userName, this.loginForm.userPassword, 2);
-							// } else {
-							// 	this.clearCookie();
-							// }
 							setTimeout(() => {
 								uni.switchTab({
 									url: '../index/index'
@@ -358,34 +353,6 @@ export default {
 				}
 			});
 		},
-		// setCookie(c_name, c_pwd, exdays) {
-		// 	var exdate = new Date(); // 获取当前时间
-		// 	exdate.setTime(exdate.getTime() + 30 * 24 * 60 * 60 * 1000 * exdays); // 保存天数
-		// 	// 字符串拼接cookie
-		// 	// eslint-disable-next-line camelcase
-		// 	window.document.cookie = 'userName' + '=' + c_name + ';path=/;expires' + exdate.toGMTString();
-		// 	// eslint-disable-next-line camelcase
-		// 	window.document.cookie = 'userPwd' + '=' + c_pwd + ';path=/;expires' + exdate.toGMTString();
-		// },
-		// // 读取cookie
-		// getCookie() {
-		// 	if (document.cookie.length > 0) {
-		// 		const arr = document.cookie.split('; ');
-		// 		for (let i = 0; i < arr.length; i++) {
-		// 			const arr2 = arr[i].split('=');
-		// 			console.log(arr2);
-		// 			if (arr2[0] === 'userName') {
-		// 				this.loginForm.userName = arr2[1];
-		// 			} else if (arr2[0] === 'userPwd') {
-		// 				this.loginForm.userPassword = arr2[1];
-		// 			}
-		// 		}
-		// 	}
-		// },
-		// // 清除cookie
-		// clearCookie() {
-		// 	this.setCookie('', '', '-1');
-		// },
 		codeChange(text) {
 			this.tips = text;
 		},
@@ -544,7 +511,7 @@ export default {
 	margin-top: 20rpx;
 	border-radius: 32rpx;
 }
-.code-input{
+.code-input {
 	margin-bottom: 50rpx;
 }
 </style>

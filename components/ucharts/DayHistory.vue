@@ -12,12 +12,18 @@
 
 <script>
 	export default {
-		props: ['machineId'],
+		props: {
+			machineId: {
+				type:Number,
+				default: 0
+			}
+		},
 		data() {
 			return {
 				dayHistoryList: {},
 				chartData:{
 				  categories:[],
+					id: this.machineId,
 				  series:[{
 						name: '日数据',
 						data: []
@@ -25,28 +31,32 @@
 				},
 			}
 		},
-		created() {
-			this.getDayHistoryList( )
+		mounted() {
+			this.getDayHistoryList()
+		},
+		watch: {
+			machineId(newValue) {
+				this.id = newValue
+			}
 		},
 		methods: {
-			getDayHistoryList() {
-				this.$sendRequest({
-					url: `getNewDateForEcharts/${this.machineId}`,
+			 async getDayHistoryList() {
+				await this.$sendRequest({
+					url: `getNewDateForEcharts/${this.id}`,
 					success: res => {
-						console.log(res.data)
 						const daylist = res.data.data
-						console.log(daylist)
+						this.chartData.series[0].data = []
+						this.chartData.categories = []
 						for(let i = 0; i < daylist.length; i=i+2) {
 							this.chartData.categories.push(parseInt(daylist[i].hDate))
 						}
 						for(let i = 0; i < daylist.length; i=i+2) {
-							var ret=  /^-?\d+(\.\d{1,3})?$/
+							const ret=  /^-?\d+(\.\d{1,3})?$/
 							if(!ret.test(parseFloat(daylist[i].avgNum))) {
 								this.chartData.series[0].data.push(parseFloat(daylist[i].avgNum).toFixed(2))
 							}else{
 								this.chartData.series[0].data.push(parseInt(daylist[i].avgNum))
 							}
-							
 						}
 					}
 				})
